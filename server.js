@@ -91,6 +91,20 @@ app.post("/register", (req, res) => {
 // Login
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
+  if (
+    username === process.env.ADMIN_USERNAME &&
+    password === process.env.ADMIN_PASSWORD
+  ) {
+    req.session.user = {
+      username: username,
+      isAdmin: true
+    };
+
+    return res.json({
+      success: true,
+      message: "เข้าสู่ระบบสำเร็จ"
+    });
+  }
 
   const users = loadUsers();
 
