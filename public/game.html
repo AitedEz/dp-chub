@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DPฉุบๆ</title>
+
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff4fa3, #ffc1df);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .box {
+      width: 90%;
+      max-width: 420px;
+      padding: 25px;
+      text-align: center;
+      background: rgba(255,255,255,.2);
+      border-radius: 25px;
+    }
+
+    h1 {
+      font-size: 36px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 15px;
+      padding: 15px 20px;
+      margin: 7px;
+      font-size: 18px;
+      font-weight: bold;
+      background: white;
+      color: #ff4f9a;
+    }
+
+    input {
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 18px;
+    }
+
+    #game {
+      display: none;
+    }
+
+    #room {
+      font-size: 28px;
+      font-weight: bold;
+      letter-spacing: 5px;
+      margin: 10px;
+    }
+
+    .choice {
+      font-size: 45px;
+    }
+
+    #result {
+      font-size: 25px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h1>🎮 DPฉุบๆ</h1>
+
+  <div id="menu">
+
+    <button onclick="createRoom()">
+      🏠 สร้างห้อง
+    </button>
+
+    <br>
+
+    <input id="roomInput" placeholder="รหัสห้อง">
+
+    <button onclick="joinRoom()">
+      🔑 เข้าห้อง
+    </button>
+
+    <p id="message"></p>
+
+  </div>
+
+  <div id="game">
+
+    <p>รหัสห้อง</p>
+
+    <div id="room"></div>
+
+    <p id="status">รอผู้เล่น...</p>
+
+    <div>
+      <button class="choice" onclick="choose('rock')">✊</button>
+      <button class="choice" onclick="choose('scissors')">✌️</button>
+      <button class="choice" onclick="choose('paper')">✋</button>
+    </div>
+
+    <div id="result"></div>
+
+  </div>
+
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+
+const socket = io();
+
+let currentRoom = "";
+
+function createRoom() {
+
+  socket.emit("createRoom", (data) => {
+
+    if (data.success) {
+
+      currentRoom = data.room;
+
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("game").style.display = "block";
+
+      document.getElementById("room").textContent = currentRoom;
+
+      document.getElementById("status").textContent =
+        "ส่งรหัสนี้ให้เพื่อน";
+
+    }
+
+  });
+
+}
+
+function joinRoom() {
+
+  const code =
+    document.getElementById("roomInput").value
+    .trim()
+    .toUpperCase();
+
+  if (!code) return;
+
+  socket.emit("joinRoom", code, (data) => {
+
+    if (data.success) {
+
+      currentRoom = data.room;
+
+      document.getElementById("menu").style.display = "none";
+      document.getElementById("game").style.display = "block";
+
+      document.getElementById("room").textContent = currentRoom;
+
+      document.getElementById("status").textContent =
+        "เข้าห้องแล้ว รอเล่น";
+
+    } else {
+
+      document.getElementById("message").textContent =
+        data.message;
+
+    }
+
+  });
+
+}
+
+socket.on("playersUpdate", (data) => {
+
+  if (data.count === 2) {
+
+    document.getElementById("status").textContent =
+      "ผู้เล่นครบแล้ว! เลือกของคุณ";
+
+  }
+
+});
+
+function choose(choice) {
+
+  socket.emit("choice", {
+    room: currentRoom,
+    choice: choice
+  });
+
+  document.getElementById("status").textContent =
+    "เลือกแล้ว รออีกฝ่าย...";
+
+}
+
+socket.on("result", (data) => {
+
+  document.getElementById("result").textContent =
+    data.result;
+
+  document.getElementById("status").textContent =
+    "จบรอบแล้ว";
+
+});
+
+</script>
+
+</body>
+</html>

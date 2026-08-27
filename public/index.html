@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DPฉุบๆ</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #ff4fa3, #ffc1df);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .box {
+      width: 92%;
+      max-width: 400px;
+      background: rgba(255,255,255,.2);
+      backdrop-filter: blur(10px);
+      padding: 25px;
+      border-radius: 25px;
+      text-align: center;
+      color: white;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      margin: 7px 0;
+      border: 0;
+      border-radius: 12px;
+      font-size: 16px;
+      outline: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      border: 0;
+      border-radius: 12px;
+      background: white;
+      color: #ff3f96;
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .switch {
+      background: transparent;
+      color: white;
+      text-decoration: underline;
+    }
+
+    #register {
+      display: none;
+    }
+
+    #message {
+      min-height: 24px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="box">
+
+  <h1>🎮 DPฉุบๆ</h1>
+  <p>เกมเป่ายิ้งฉุบออนไลน์</p>
+
+  <!-- LOGIN -->
+  <div id="login">
+
+    <h2>เข้าสู่ระบบ</h2>
+
+    <input
+      id="loginUser"
+      type="text"
+      placeholder="ชื่อผู้ใช้"
+    >
+
+    <input
+      id="loginPass"
+      type="password"
+      placeholder="รหัสผ่าน"
+    >
+
+    <button onclick="login()">
+      เข้าสู่ระบบ
+    </button>
+
+    <button class="switch" onclick="showRegister()">
+      สมัครบัญชี
+    </button>
+
+  </div>
+
+  <!-- REGISTER -->
+  <div id="register">
+
+    <h2>สมัครบัญชี</h2>
+
+    <input
+      id="regUser"
+      type="text"
+      placeholder="ชื่อผู้ใช้"
+    >
+
+    <input
+      id="regPass"
+      type="password"
+      placeholder="รหัสผ่าน"
+    >
+
+    <input
+      id="regPass2"
+      type="password"
+      placeholder="ยืนยันรหัสผ่าน"
+    >
+
+    <button onclick="register()">
+      สมัครสมาชิก
+    </button>
+
+    <button class="switch" onclick="showLogin()">
+      กลับไปเข้าสู่ระบบ
+    </button>
+
+  </div>
+
+  <p id="message"></p>
+
+</div>
+
+<script>
+
+function showRegister() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("register").style.display = "block";
+  document.getElementById("message").textContent = "";
+}
+
+function showLogin() {
+  document.getElementById("register").style.display = "none";
+  document.getElementById("login").style.display = "block";
+  document.getElementById("message").textContent = "";
+}
+
+async function register() {
+
+  const username =
+    document.getElementById("regUser").value.trim();
+
+  const password =
+    document.getElementById("regPass").value;
+
+  const password2 =
+    document.getElementById("regPass2").value;
+
+  if (!username || !password) {
+    document.getElementById("message").textContent =
+      "กรุณากรอกข้อมูลให้ครบ";
+    return;
+  }
+
+  if (password !== password2) {
+    document.getElementById("message").textContent =
+      "รหัสผ่านไม่ตรงกัน";
+    return;
+  }
+
+  const response = await fetch("/register", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username,
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  document.getElementById("message").textContent =
+    data.message;
+
+  if (data.success) {
+    showLogin();
+  }
+}
+
+async function login() {
+
+  const username =
+    document.getElementById("loginUser").value.trim();
+
+  const password =
+    document.getElementById("loginPass").value;
+
+  const response = await fetch("/login", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      username,
+      password
+    })
+  });
+
+  const data = await response.json();
+
+  document.getElementById("message").textContent =
+    data.message;
+
+  if (data.success) {
+    window.location.href = "/game.html";
+  }
+}
+
+</script>
+
+</body>
+</html>

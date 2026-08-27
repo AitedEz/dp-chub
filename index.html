@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>jackkymala</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #ff4f9a;
+    color: white;
+    text-align: center;
+}
+
+.box {
+    margin: 100px 20px;
+}
+
+button {
+    padding: 12px 25px;
+    border: 0;
+    border-radius: 10px;
+    font-size: 16px;
+}
+</style>
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #00ff88;
+}
+</head>
+
+<body>
+
+<div class="box">
+    <h1>JACKKYEIEI</h1>
+    <p>สร้างด้วยมือถือ 📱</p>
+    <button onclick="alert('สวัสดี!')">กดตรงนี้</button>
+</div>
+
+</body><!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ร้านค้าของฉัน</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: sans-serif;
+    background: #f5f5f5;
+}
+
+header {
+    background: #111;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+.categories {
+    display: flex;
+    gap: 10px;
+    padding: 15px;
+    overflow-x: auto;
+    background: white;
+}
+
+.categories button {
+    border: none;
+    padding: 10px 18px;
+    border-radius: 20px;
+    background: #ddd;
+    white-space: nowrap;
+}
+
+.categories button:hover {
+    background: #111;
+    color: white;
+}
+
+.products {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    padding: 15px;
+}
+
+.product {
+    background: white;
+    padding: 15px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.product h3 {
+    margin: 8px 0;
+}
+
+.price {
+    color: red;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>ร้านค้าของฉัน</h1>
+    <p>สินค้าคุณภาพ ราคาพิเศษ</p>
+</header>
+
+<div class="categories">
+
+    <button onclick="filterProducts('all')">
+        สินค้าทั้งหมด
+    </button>
+
+    <button onclick="filterProducts('phone')">
+        ไฟล์มองทะลุ(สำหรับเดิมพัน)
+    </button>
+
+    <button onclick="filterProducts('accessory')">
+        ไฟล์ดูดหัว/ไฟล์ช่วยลาก
+    </button>
+
+    <button onclick="filterProducts('computer')">
+        proxyAD/ios
+    </button>
+
+</div>
+
+<div class="products">
+
+    <div class="product" data-category="phone">
+        <h3>โทรศัพท์ A</h3>
+        <p>มือถือรุ่นใหม่</p>
+        <div class="price">฿9,990</div>
+    </div>
+
+    <div class="product" data-category="phone">
+        <h3>โทรศัพท์ B</h3>
+        <p>มือถือราคาประหยัด</p>
+        <div class="price">฿5,990</div>
+    </div>
+
+    <div class="product" data-category="accessory">
+        <h3>หูฟัง Bluetooth</h3>
+        <p>เสียงคุณภาพสูง</p>
+        <div class="price">฿799</div>
+    </div>
+
+    <div class="product" data-category="accessory">
+        <h3>เคสโทรศัพท์</h3>
+        <p>เคสกันกระแทก</p>
+        <div class="price">฿299</div>
+    </div>
+
+    <div class="product" data-category="computer">
+        <h3>โน้ตบุ๊ก</h3>
+        <p>เหมาะสำหรับทำงาน</p>
+        <div class="price">฿19,990</div>
+    </div>
+
+</div>
+
+<script>
+
+function filterProducts(category) {
+
+    const products = document.querySelectorAll(".product");
+
+    products.forEach(function(product) {
+
+        if (
+            category === "all" ||
+            product.dataset.category === category
+        ) {
+            product.style.display = "block";
+        } else {
+            product.style.display = "none";
+        }
+
+    });
+
+}
+
+</script>
+
+</body>
+</html>
+</nav>
+</html>
