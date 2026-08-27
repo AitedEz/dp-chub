@@ -183,10 +183,11 @@ io.on("connection", (socket) => {
 
     const room = generateRoomCode();
 
-    rooms[room] = {
-      players: [socket.id],
-      choices: {}
-    };
+rooms[room] = {
+  players: [socket.id],
+  choices: {},
+  started: false
+};
 
     socket.join(room);
 
@@ -201,6 +202,30 @@ io.on("connection", (socket) => {
 
 
   // เข้าห้อง
+socket.on("startGame", (roomCode) => {
+  const room = rooms[roomCode];
+
+  if (!room) return;
+  if (room.players[0] !== socket.id) return;
+  if (room.players.length !== 2) return;
+  if (room.started) return;
+
+  room.started = true;
+  room.choices = {};
+
+  let count = 3;
+
+  const countdown = setInterval(() => {
+    io.to(roomCode).emit("countdown", count);
+
+    count--;
+
+    if (count < 0) {
+      clearInterval(countdown);
+      io.to(roomCode).emit("gameStarted");
+    }
+  }, 1000);
+});
   socket.on("joinRoom", (code, callback) => {
 
     code = String(code).toUpperCase().trim();
@@ -246,6 +271,7 @@ io.on("connection", (socket) => {
       return;
     }
 
+if (!rooms[room].started) return;
     rooms[room].choices[socket.id] = choice;
 
     const players = rooms[room].players;

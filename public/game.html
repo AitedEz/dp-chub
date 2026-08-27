@@ -146,6 +146,7 @@
 const socket = io();
 
 let currentRoom = "";
+let isHost = false;
 
 function createRoom() {
 
@@ -225,7 +226,6 @@ function choose(choice) {
 
   socket.emit("choice", {
     room: currentRoom,
-let isHost = false;
     choice: choice
   });
 
