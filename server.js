@@ -280,6 +280,8 @@ io.on("connection", (socket) => {
 });
 
 
-server.listen(8080, "0.0.0.0", () => {
-  console.log("RPS Server running on port 8080");
+const PORT = process.env.PORT || 8080;
+
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`RPS Server running on port ${PORT}`);
 });
