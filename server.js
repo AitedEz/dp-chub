@@ -130,6 +130,21 @@ app.post("/login", (req, res) => {
 });
 
 // หน้าเว็บ
+// Admin API
+app.get("/admin/data", (req, res) => {
+  if (!req.session.user || !req.session.user.isAdmin) {
+    return res.status(403).json({
+      success: false,
+      message: "ไม่มีสิทธิ์"
+    });
+  }
+
+  res.json({
+    success: true,
+    users: loadUsers(),
+    rooms: rooms
+  });
+});
 app.use(express.static("public"));
 
 // หน้าเกมต้อง Login ก่อน

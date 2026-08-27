@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff0f6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .box {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 5px 20px rgba(0,0,0,.1);
+    }
+
+    h1 {
+      color: #e83e8c;
+    }
+
+    button {
+      background: #e83e8c;
+      color: white;
+      border: 0;
+      padding: 10px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    pre {
+      background: #f8f8f8;
+      padding: 15px;
+      border-radius: 10px;
+      overflow: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>🔐 Admin Panel</h1>
+
+    <button onclick="loadData()">รีเฟรชข้อมูล</button>
+
+    <h2>👥 ผู้ใช้</h2>
+    <pre id="users">กำลังโหลด...</pre>
+
+    <h2>🏠 ห้องที่กำลังเปิด</h2>
+    <pre id="rooms">กำลังโหลด...</pre>
+  </div>
+
+  <script>
+    async function loadData() {
+      try {
+        const res = await fetch("/admin/data");
+        const data = await res.json();
+
+        if (!data.success) {
+          document.body.innerHTML = "<h2>ไม่มีสิทธิ์เข้าหน้านี้</h2>";
+          return;
+        }
+
+       
