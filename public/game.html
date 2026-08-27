@@ -68,6 +68,25 @@
       font-size: 25px;
       margin-top: 20px;
     }
+.win-effect {
+  animation: winPop 0.5s ease-in-out infinite alternate;
+  font-size: 50px !important;
+  font-weight: bold;
+  text-shadow:
+    0 0 10px gold,
+    0 0 20px orange,
+    0 0 40px gold;
+}
+
+@keyframes winPop {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.15);
+  }
+}
   </style>
 </head>
 
@@ -204,11 +223,20 @@ function choose(choice) {
 
 socket.on("result", (data) => {
 
-  document.getElementById("result").textContent =
-    data.result;
+  const result = document.getElementById("result");
+
+  result.textContent = data.result;
 
   document.getElementById("status").textContent =
     "จบรอบแล้ว";
+
+  if (data.result.includes("ชนะ")) {
+    result.classList.add("win-effect");
+
+    setTimeout(() => {
+      result.classList.remove("win-effect");
+    }, 2000);
+  }
 
 });
 
