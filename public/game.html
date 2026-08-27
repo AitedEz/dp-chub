@@ -121,6 +121,11 @@
     <div id="room"></div>
 
     <p id="status">รอผู้เล่น...</p>
+<button id="startBtn" onclick="startGame()" style="display:none;">
+  ▶️ เริ่มเกม
+</button>
+
+<div id="countdown"></div>
 
     <div>
       <button class="choice" onclick="choose('rock')">✊</button>
@@ -149,6 +154,9 @@ function createRoom() {
     if (data.success) {
 
       currentRoom = data.room;
+isHost = true;
+
+document.getElementById("startBtn").style.display = "none";
 
       document.getElementById("menu").style.display = "none";
       document.getElementById("game").style.display = "block";
@@ -203,7 +211,11 @@ socket.on("playersUpdate", (data) => {
   if (data.count === 2) {
 
     document.getElementById("status").textContent =
-      "ผู้เล่นครบแล้ว! เลือกของคุณ";
+      "ผู้เล่นครบแล้ว!";
+
+    if (isHost) {
+      document.getElementById("startBtn").style.display = "inline-block";
+    }
 
   }
 
@@ -213,6 +225,7 @@ function choose(choice) {
 
   socket.emit("choice", {
     room: currentRoom,
+let isHost = false;
     choice: choice
   });
 
@@ -221,6 +234,29 @@ function choose(choice) {
 
 }
 
+function startGame() {
+  if (!isHost || !currentRoom) return;
+
+  socket.emit("startGame", currentRoom);
+}
+
+socket.on("countdown", (count) => {
+  const countdown = document.getElementById("countdown");
+
+  countdown.textContent = count;
+
+  if (count === 0) {
+    countdown.textContent = "เป่ายิ้งฉุบ!";
+  }
+});
+
+socket.on("gameStarted", () => {
+  document.getElementById("countdown").textContent =
+    "เป่ายิ้งฉุบ!";
+
+  document.getElementById("status").textContent =
+    "เลือกของคุณ!";
+});
 socket.on("result", (data) => {
 
   const result = document.getElementById("result");
