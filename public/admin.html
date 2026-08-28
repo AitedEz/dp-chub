@@ -66,5 +66,19 @@
           document.body.innerHTML = "<h2>ไม่มีสิทธิ์เข้าหน้านี้</h2>";
           return;
         }
+document.getElementById("users").textContent =
+  JSON.stringify(data.users, null, 2);
 
-       
+document.getElementById("rooms").textContent =
+  JSON.stringify(data.rooms, null, 2);
+
+      } catch (err) {
+        console.error(err);
+        document.getElementById("users").textContent =
+          "โหลดข้อมูลไม่สำเร็จ";
+        document.getElementById("rooms").textContent =
+          "โหลดข้อมูลไม่สำเร็จ";
+      }
+    }
+
+    loadData();
