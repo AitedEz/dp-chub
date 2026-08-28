@@ -229,6 +229,9 @@ async function login() {
     data.message;
 
   if (data.success) {
+  if (data.isAdmin) {
+    window.location.href = "/admin.html";
+  } else {
     window.location.href = "/game.html";
   }
 }

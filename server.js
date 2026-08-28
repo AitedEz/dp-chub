@@ -95,10 +95,11 @@ app.post("/login", (req, res) => {
     username === process.env.ADMIN_USERNAME &&
     password === process.env.ADMIN_PASSWORD
   ) {
-    req.session.user = {
-      username: username,
-      isAdmin: true
-    };
+    return res.json({
+  success: true,
+  message: "เข้าสู่ระบบสำเร็จ",
+  isAdmin: true
+});
 
     return res.json({
       success: true,
